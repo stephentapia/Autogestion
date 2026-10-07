@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#003B7A">
+<title>Autogestión Tattersall</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="bg" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+<div class="wrap">
+  <div class="brand">TATTERSALL</div>
+
+  <!-- LOGIN -->
+  <section id="login" class="panel center">
+    <h1>Autogestión de usuarios</h1>
+    <p class="sub">Ingresa con tu correo corporativo.</p>
+    <div class="card" id="l1" style="text-align:left">
+      <label for="em">Correo corporativo</label>
+      <input id="em" type="email" placeholder="nombre.apellido@tattersall.cl">
+      <button class="btn" style="margin-top:20px" onclick="step(2)">Continuar</button>
+      <button class="btn out" onclick="step(2)">Ingresar con Microsoft</button>
+    </div>
+    <div class="card hide" id="l2" style="text-align:left">
+      <p style="margin-top:0">Verificación en dos pasos. Aprueba la solicitud en Microsoft Authenticator o ingresa el código.</p>
+      <label for="cd">Código de 6 dígitos</label>
+      <input id="cd" type="text" inputmode="numeric" maxlength="6" placeholder="000000">
+      <button class="btn" style="margin-top:20px" onclick="enter()">Verificar e ingresar</button>
+      <button class="btn out" onclick="step(1)">Volver</button>
+    </div>
+    <p class="hint">Maqueta de navegación: no se valida ningún dato.</p>
+  </section>
+
+  <!-- APP -->
+  <div id="app" class="panel hide">
+    <nav class="nav" id="nav"></nav>
+
+    <section id="v-inicio">
+      <h2>Hola, Wladimir</h2>
+      <p class="sub">Tu contraseña vence en 18 días.</p>
+      <button class="btn" onclick="go('desbloquear')">Desbloquear cuenta</button>
+      <button class="btn alt" onclick="go('clave')">Cambiar contraseña</button>
+      <div class="card">
+        <strong>Estado de sistemas</strong>
+        <div class="row"><span>AD</span><span class="ok">Activo</span></div>
+        <div class="row"><span>SAP BO</span><span class="ok">Sincronizado</span></div>
+        <div class="row"><span>SAP Logon</span><span class="ok">Sincronizado</span></div>
+        <div class="row"><span>Rentway</span><span class="bad">Desfasado</span></div>
+        <button class="btn out" style="margin:14px 0 0" onclick="toast('Sincronización enviada')">Sincronizar todo</button>
+      </div>
+    </section>
+
+    <section id="v-desbloquear" class="hide">
+      <h2>Desbloquear cuenta</h2>
+      <p class="sub">Tu cuenta de AD está bloqueada por intentos fallidos.</p>
+      <div class="card">
+        <div class="row"><span>Estado</span><span class="bad">Bloqueada</span></div>
+        <div class="row"><span>Último intento fallido</span><span>Hoy 08:42</span></div>
+        <div class="row"><span>Verificación</span><span>MFA requerido</span></div>
+      </div>
+      <button class="btn" onclick="toast('Cuenta desbloqueada')">Verificar y desbloquear</button>
+    </section>
+
+    <section id="v-clave" class="hide">
+      <h2>Cambiar contraseña</h2>
+      <p class="sub">Se actualiza en los sistemas que elijas.</p>
+      <div class="card">
+        <label for="a">Contraseña actual</label><input id="a" type="password">
+        <label for="b">Nueva contraseña</label><input id="b" type="password">
+        <label for="c">Repetir nueva contraseña</label><input id="c" type="password">
+        <p class="hint">Mínimo 12 caracteres, con mayúscula, número y símbolo.</p>
+        <strong>Aplicar en</strong>
+        <div class="chk"><input type="checkbox" id="x1" checked><label for="x1">AD</label></div>
+        <div class="chk"><input type="checkbox" id="x2" checked><label for="x2">SAP BO</label></div>
+        <div class="chk"><input type="checkbox" id="x3" checked><label for="x3">SAP Logon</label></div>
+        <div class="chk"><input type="checkbox" id="x4" checked><label for="x4">Rentway</label></div>
+      </div>
+      <button class="btn" onclick="toast('Contraseña actualizada')">Guardar contraseña</button>
+    </section>
+
+    <section id="v-historial" class="hide">
+      <h2>Historial</h2>
+      <p class="sub">Tus últimas acciones.</p>
+      <div class="card">
+        <div class="row"><span>Cambio de contraseña · AD, SAP BO</span><small>03 oct 10:12</small></div>
+        <div class="row"><span>Desbloqueo de cuenta · AD</span><small>28 sep 08:50</small></div>
+        <div class="row"><span>Sincronización · Rentway</span><small>21 sep 17:03</small></div>
+        <div class="row"><span>Inicio de sesión con MFA</span><small>21 sep 17:01</small></div>
+      </div>
+    </section>
+
+    <section id="v-mesa" class="hide">
+      <h2>Mesa de Servicios</h2>
+      <p class="sub">Vista para el equipo de soporte.</p>
+      <div class="kpis">
+        <div class="kpi"><b>7</b><span>Bloqueados hoy</span></div>
+        <div class="kpi"><b>23</b><span>Cambios de clave</span></div>
+        <div class="kpi"><b>2</b><span>Errores de sync</span></div>
+      </div>
+      <div class="card">
+        <label for="q" style="margin-top:0">Buscar usuario</label>
+        <input id="q" type="text" placeholder="Nombre o correo">
+        <div class="scroll" style="margin-top:14px">
+          <table>
+            <tr><th>Usuario</th><th>Estado</th><th>Acciones</th></tr>
+            <tr><td>m.rojas</td><td class="bad">Bloqueado</td><td><button class="btn sm" onclick="toast('Desbloqueo forzado')">Forzar desbloqueo</button></td></tr>
+            <tr><td>c.vera</td><td class="bad">Bloqueado</td><td><button class="btn sm" onclick="toast('Desbloqueo forzado')">Forzar desbloqueo</button></td></tr>
+            <tr><td>j.soto</td><td class="ok">Activo</td><td><button class="btn sm er" onclick="toast('Clave temporal generada')">Clave temporal</button></td></tr>
+          </table>
+        </div>
+        <button class="btn out" style="margin:16px 0 0" onclick="toast('Reporte exportado')">Exportar reporte</button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+var items=[["inicio","Inicio"],["desbloquear","Desbloquear"],["clave","Contraseña"],["historial","Historial"],["mesa","Mesa"]];
+document.getElementById("nav").innerHTML=items.map(function(i){return '<button data-v="'+i[0]+'" onclick="go(\''+i[0]+'\')">'+i[1]+'</button>'}).join("");
+function step(n){document.getElementById("l1").classList.toggle("hide",n!==1);document.getElementById("l2").classList.toggle("hide",n!==2)}
+function enter(){document.getElementById("login").classList.add("hide");document.getElementById("app").classList.remove("hide");go("inicio")}
+function go(v){items.forEach(function(i){document.getElementById("v-"+i[0]).classList.toggle("hide",i[0]!==v)});document.querySelectorAll("#nav button").forEach(function(b){b.classList.toggle("on",b.dataset.v===v)});window.scrollTo(0,0)}
+var tm;function toast(t){var e=document.getElementById("toast");e.textContent=t;e.style.display="block";clearTimeout(tm);tm=setTimeout(function(){e.style.display="none"},2000)}
+</script>
+</body>
+</html>
